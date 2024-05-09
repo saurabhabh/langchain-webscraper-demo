@@ -1,4 +1,6 @@
 import argparse
+from logging import log
+from warnings import catch_warnings
 import requests
 import os
 from urllib.parse import urlparse
@@ -16,14 +18,23 @@ def cleanUrl(url: str):
 
 
 def get_response_and_save(url: str):
-    response = requests.get(url)
-    if not os.path.exists("./scrape"):
-        os.mkdir("./scrape")
-    parsedUrl = cleanUrl(url)
-    with open("./scrape/" + parsedUrl + ".html", "wb") as f:
-        f.write(response.content)
-    return response
-
+    try:
+        response = requests.get(url)
+        log(1,response.json)
+        if not os.path.exists("./scrape"):
+            os.mkdir("./scrape")
+        parsedUrl = cleanUrl(url)
+        with open("./scrape/" + parsedUrl + ".html", "wb") as f:
+            f.write(response.content)
+        return response
+    except:
+        print("An exception occurred")
+        the_response =  requests.Response()
+        the_response.code = "expired"
+        the_response.error_type = "expired"
+        the_response.status_code = 400
+        the_response._content = b'{ "key" : "a" }'
+        return the_response
 
 def scrape_links(
     scheme: str,

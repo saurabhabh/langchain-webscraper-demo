@@ -1,13 +1,12 @@
 import os
 import json
 
-from langchain.document_loaders import (
-    BSHTMLLoader,
-    DirectoryLoader,
-)
+
+from langchain_community.document_loaders import DirectoryLoader
+from langchain_community.document_loaders import BSHTMLLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 
 from dotenv import load_dotenv
 
@@ -17,13 +16,15 @@ if __name__ == "__main__":
         print("already embedded")
         exit(0)
 
+
     loader = DirectoryLoader(
         "./scrape",
         glob="*.html",
         loader_cls=BSHTMLLoader,
         show_progress=True,
-        loader_kwargs={"get_text_separator": " "},
+        loader_kwargs={"get_text_separator": " ", "open_encoding" : "utf-8"},
     )
+    
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
         chunk_overlap=200,
@@ -37,7 +38,7 @@ if __name__ == "__main__":
 
     for document in documents:
         document.metadata["source"] = sitemap[
-            document.metadata["source"].replace(".html", "").replace("scrape/", "")
+            document.metadata["source"].replace(".html", "").replace("scrape\\", "")
         ]
 
     embedding_model = OpenAIEmbeddings(model="text-embedding-ada-002")

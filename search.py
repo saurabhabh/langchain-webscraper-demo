@@ -20,5 +20,5 @@ if __name__ == "__main__":
     db = Chroma(persist_directory="./chroma", embedding_function=embeddings)
     docs = db.similarity_search(args.search_string)
     for doc in docs[0:5]:
-        print(doc)
+        print(doc.metadata)
         print("\n")

@@ -4,13 +4,12 @@ from dotenv import load_dotenv
 
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from langchain.vectorstores import Chroma
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.chat_models import ChatOpenAI
 from langchain.chains import create_qa_with_sources_chain, LLMChain
 from langchain.prompts import PromptTemplate
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
-
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.vectorstores import Chroma
+from langchain_community.embeddings import OpenAIEmbeddings
 import gradio
 
 load_dotenv()
